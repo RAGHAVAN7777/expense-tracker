@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <h2 class="logo">Expense</h2>
+
+            <nav>
+                <a class="active" data-page="dashboard">Dashboard</a>
+                <a data-page="add">Add Expense</a>
+                <a data-page="analytics">Analytics</a>
+                <a data-page="statements">Statements</a>
+                <a data-page="ai">AI Insights</a>
+                <a data-page="settings">Settings</a>
+            </nav>
+        </aside>
+
+        <!-- MAIN AREA -->
+        <main class="main">
+
+            <!-- HEADER -->
+            <header class="topbar">
+                <div class="username" id="headerUsername">👤 Raghavan</div>
+                <div class="actions">
+                    <button class="logout" id="logoutBtn">Logout</button>
+                </div>
+            </header>
+
+            <!-- CONTENT -->
+            <section class="content">
+
+                <!-- DASHBOARD PAGE -->
+                <div class="page active" id="dashboard">
+
+                    <!-- SUMMARY CARDS -->
+                    <div class="cards">
+
+                        <div class="card">
+                            <h3>Monthly Income</h3>
+                            <input type="number" id="incomeInput" placeholder="Enter income">
+                            <button id="setIncomeBtn" class="small-btn">+ Add Income</button>
+                            <p id="incomeDisplay">₹0</p>
+                        </div>
+
+                        <!-- 🟢 SAVINGS CARD (NEW) -->
+                        <div class="card">
+                            <h3>Savings</h3>
+                            <p id="savingsDisplay" style="color:#16a34a;">₹0</p>
+                        </div>
+
+                        <div class="card">
+                            <h3>Total Spent</h3>
+                            <p id="totalSpent">₹0</p>
+                        </div>
+
+                        <div class="card">
+                            <h3>Remaining Balance</h3>
+                            <p id="remaining">₹0</p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- CALENDAR BELOW CARDS -->
+                    <div class="calendar-card">
+
+                        <div class="calendar-header">
+                            <h3>📅 MANUALY EDITABLE CALENDAR</h3>
+                            <span id="currentDateText"></span>
+                        </div>
+
+                        <!-- WEEK DAYS -->
+                        <div class="calendar-weekdays">
+                            <span>Sun</span><span>Mon</span><span>Tue</span>
+                            <span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+                        </div>
+
+                        <!-- DAYS GRID -->
+                        <div class="calendar-grid" id="calendarGrid"></div>
+
+                        <button class="primary-btn" id="nextDayBtn">+ Advance Day</button>
+
+                    </div>
+
+                </div> <!-- ✅ FIX: CLOSE DASHBOARD PAGE -->
+
+                <!-- ADD EXPENSE PAGE -->
+                <div class="page" id="add">
+                    <div class="add-expense-card">
+                        <h2>Add New Expense</h2>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="category">
+                                    <option>Living</option>
+                                    <option>Food</option>
+                                    <option>Transport</option>
+                                    <option>Education</option>
+                                    <option>Health</option>
+                                    <option>Lifestyle</option>
+                                    <option>Finance</option>
+                                    <option>Others</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Amount (₹)</label>
+                                <input type="number" id="amount" placeholder="e.g. 1500">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Expense Label / Description</label>
+                            <input type="text" id="label" placeholder="e.g. July house rent, Dinner, Fuel">
+                        </div>
+
+                        <button id="addExpenseBtn" class="primary-btn">
+                            + Add Expense
+                        </button>
+                        <!-- Spending Progress -->
+                        <div class="expense-progress-box">
+                            <div class="expense-progress-track">
+                                <div id="expenseProgressFill" class="expense-progress-fill"></div>
+                                <div id="expenseGate" class="expense-gate"></div>
+                                <div id="expenseGate80" class="expense-gate gate-80"></div>
+                                <div id="expenseGate90" class="expense-gate gate-90"></div>
+                            </div>
+
+                            <!-- SCALE -->
+                            <div id="progressScale" class="expense-progress-scale">
+                                <span>0%</span><span>10%</span><span>20%</span><span>30%</span><span>40%</span><span>50%</span><span>60%</span><span>70%</span><span>80%</span><span>90%</span><span>100%</span>
+                            </div>
+
+                            <div id="expenseProgressText" class="expense-progress-text">
+                                ₹0 spent
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- ANALYTICS PAGE -->
+                <div class="page" id="analytics">
+                    <div class="panel">
+                        <h3>Category-wise Spending</h3>
+
+                        <canvas id="categoryChart" width="400" height="400"
+                            style="max-width:400px; margin-top:20px;"></canvas>
+                        <!-- 📊 MONTHLY SPENDING TREND -->
+                        <canvas id="monthlyTrendChart" width="700" height="350"
+                            style="max-width:700px; margin-top:40px;"></canvas>
+
+                    </div>
+                </div>
+
+
+
+                <!-- STATEMENTS PAGE -->
+                <div class="page" id="statements">
+                    <div class="statements-card" id="printArea">
+
+                        <div class="statement-header">
+                            <h2>Expense Statements</h2>
+                            <button class="print-btn" onclick="printStatements()">
+                                🖨 Print PDF
+                            </button>
+                        </div>
+
+                        <table class="statement-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>Amount (₹)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="statementBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- AI PAGE -->
+                <div class="page" id="ai">
+                    <div class="ai-dashboard-container">
+                        <div class="section-header">
+                            <h3>🤖 AI Savings Intelligence</h3>
+                        </div>
+
+                        <div class="ai-grid">
+                            <!-- MASTER INTELLIGENCE BOX -->
+                            <div class="ai-card intelligence-main-card">
+                                <div class="intelligence-split">
+                                    <!-- Left: Planner -->
+                                    <div class="intelligence-section planner-side">
+                                        <div class="card-header">
+                                            <h4>🎯 Target Planning</h4>
+                                        </div>
+                                        <div class="ai-inputs-vertical">
+                                            <div class="input-group">
+                                                <label for="goalAmount">Savings Target</label>
+                                                <div class="input-wrapper">
+                                                    <span class="currency-label">₹</span>
+                                                    <input type="number" id="goalAmount" placeholder="0">
+                                                </div>
+                                            </div>
+                                            <div class="input-group">
+                                                <label for="goalMonth">Select Month</label>
+                                                <select id="goalMonth">
+                                                    <option value="0">January</option>
+                                                    <option value="1">February</option>
+                                                    <option value="2">March</option>
+                                                    <option value="3">April</option>
+                                                    <option value="4">May</option>
+                                                    <option value="5">June</option>
+                                                    <option value="6">July</option>
+                                                    <option value="7">August</option>
+                                                    <option value="8">September</option>
+                                                    <option value="9">October</option>
+                                                    <option value="10">November</option>
+                                                    <option value="11">December</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <button id="setGoalBtn" class="primary-btn ai-activate-btn">
+                                            🚀 Set Priority Goal
+                                        </button>
+                                    </div>
+
+                                    <!-- Right: Analysis -->
+                                    <div class="intelligence-section analysis-side">
+                                        <div class="card-header">
+                                            <h4>🧠 AI Professional Analysis</h4>
+                                        </div>
+                                        <div id="aiInsights" class="ai-insights-display">
+                                            <p class="placeholder-text">Enter your goals to generate a detailed
+                                                financial strategy.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Integrated Progress Footer -->
+                                <div class="intelligence-footer progress-integrated">
+                                    <div class="progress-info">
+                                        <span class="progress-label">Global Goal Completion</span>
+                                        <span id="progressPercent" class="progress-value">0%</span>
+                                    </div>
+                                    <div class="ai-progress-track-refined">
+                                        <div id="progressFill" class="ai-progress-fill-liquid"></div>
+                                    </div>
+                                    <div class="ai-progress-footer" id="progressText">
+                                        ₹0 saved of ₹0 goal
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- BIG MAIN BALANCER -->
+                            <div class="ai-card balancer-card main-balancer">
+                                <div id="balancerAura" class="balancer-aura"></div>
+                                <div class="card-header">
+                                    <h4>⚖️ AI CORE SMART BALANCER</h4>
+                                </div>
+                                <div class="balancer-content">
+                                    <div class="velocity-stats">
+                                        <div class="v-stat">
+                                            <span class="v-label">Spending Velocity</span>
+                                            <span id="balancerStatus" class="v-value">Stabilizing...</span>
+                                        </div>
+                                        <div class="v-stat">
+                                            <span class="v-label">Ideal Daily Average</span>
+                                            <span id="idealDaily" class="v-value">₹0</span>
+                                        </div>
+                                    </div>
+                                    <div class="balancer-visual">
+                                        <div class="balancer-track">
+                                            <div id="balancerFill" class="balancer-fill"></div>
+                                            <div class="balancer-marker today-marker" id="todayMarker"></div>
+                                        </div>
+                                        <div class="balancer-labels">
+                                            <span>Month Start</span>
+                                            <span id="currentDayLabel" class="current-day-badge">Current Pulse</span>
+                                            <span>Month End</span>
+                                        </div>
+                                    </div>
+                                    <div id="balancerTip" class="balancer-tip">
+                                        Your financial velocity is being monitored in real-time.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Card 5: SMART REMAINDERS (BIG MAIN) -->
+                            <div class="ai-card reminders-card main-balancer">
+                                <div class="card-header">
+                                    <h4>🔔 Smart Reminders</h4>
+                                </div>
+                                <div class="reminders-container">
+                                    <div class="reminder-inputs">
+                                        <div class="input-group">
+                                            <label>What should I remind you?</label>
+                                            <input type="text" id="reminderText"
+                                                placeholder="e.g., Pay house rent, Buy groceries...">
+                                        </div>
+                                        <div class="input-group">
+                                            <label>When?</label>
+                                            <input type="date" id="reminderDate">
+                                        </div>
+                                        <button id="addReminderBtn" class="primary-btn">
+                                            ➕ Add Reminder
+                                        </button>
+                                    </div>
+                                    <div class="reminder-list-wrapper">
+                                        <h5>Upcoming Reminders</h5>
+                                        <div id="reminderList" class="reminder-list">
+                                            <!-- Reminders will be injected here -->
+                                            <p class="placeholder-text">No reminders set yet.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- SETTINGS PAGE -->
+                <div class="page" id="settings">
+                    <div class="panel">
+                        <h3>Settings</h3>
+
+                        <div style="margin-top:20px;">
+                            <button id="themeToggleBtn" class="primary-btn">
+                                🌙 Toggle Dark Mode
+                            </button>
+                        </div>
+
+                        <div style="margin-top:20px;">
+                            <button id="resetMonthBtn" class="primary-btn">
+                                🔄 Reset Current Month
+                            </button>
+                        </div>
+
+                        <div style="margin-top:20px;">
+                            <button id="resetAppBtn" class="primary-btn" style="background:#ef4444;">
+                                ♻️ Reset Entire App
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- GLOBAL OVERLAYS -->
+    <div id="reminderFlash" class="reminder-flash-overlay"></div>
+
+    <div id="reminderPopupOverlay" class="reminder-popup-overlay">
+        <div class="reminder-popup-card">
+            <div class="popup-icon">🔔</div>
+            <h3>Smart Reminder</h3>
+            <div id="activeRemindersList" class="popup-reminder-list">
+                <!-- Active reminders injected here -->
+            </div>
+            <button id="dismissRemindersBtn" class="primary-btn">✅ Got it, Dismiss All</button>
+        </div>
+    </div>
+
+    <!-- 🛑 USAGE LIMIT ALERT POPUP -->
+    <div id="usageLimitPopupOverlay" class="reminder-popup-overlay">
+        <div class="reminder-popup-card usage-limit-card">
+            <!-- 💸 VAPORIZE CONTAINER -->
+            <div class="vaporize-container" id="vaporizeContainer">
+                <span>💸</span><span>💸</span><span>💸</span><span>💸</span><span>💸</span>
+            </div>
+            <div class="popup-icon">⚠️</div>
+            <h3 id="usageLimitTitle">Usage Limit Reached</h3>
+            <div class="popup-reminder-list">
+                <div class="popup-item limit-msg-item">
+                    <p id="usageLimitMsg">You have reached 100% of your spending limit. Cannot add more expenses.</p>
+                </div>
+                <!-- 💡 ADVICE TEXT CONTAINER -->
+                <div id="usageAdviceContainer" class="popup-item advice-item" style="display: none;">
+                    <p id="usageAdviceText" style="font-style: italic; color: var(--primary);"></p>
+                </div>
+            </div>
+            <div class="popup-btn-group">
+                <button id="dismissUsageLimitBtn" class="primary-btn">Acknowledged</button>
+                <button id="showAdviceBtn" class="primary-btn advice-btn">💡 Get Advice</button>
+                <button id="skipAdviceBtn" class="primary-btn skip-btn" style="display: none;">🛑 Skip Advice</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>

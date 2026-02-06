@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Expense Tracker - Login</title>
+    <!-- Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #8b5cf6;
+            --glass-bg: rgba(20, 20, 35, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --neon-glow: 0 0 20px rgba(99, 102, 241, 0.6);
+            --text-light: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            background-image:
+                linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+                url("https://img.freepik.com/premium-photo/bank-system-concept-with-black-debit-cards-dark-background_670147-29293.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* ================= LOGIN CARD (PREMIUM) ================= */
+        .login-container {
+            width: 400px;
+            padding: 50px 40px;
+            border-radius: 24px;
+
+            /* Ultra Glass Effect */
+            background: rgba(18, 18, 24, 0.6);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            /* Floating Glow */
+            box-shadow:
+                0 0 0 1px rgba(255, 255, 255, 0.05),
+                0 25px 50px -12px rgba(0, 0, 0, 0.8),
+                0 0 60px rgba(99, 102, 241, 0.15);
+            /* Subtle ambient glow */
+
+            /* EXACT USER POSITION */
+            transform: translate(400px, -90px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(400px, -90px);
+            }
+
+            50% {
+                transform: translate(400px, -100px);
+            }
+
+            100% {
+                transform: translate(400px, -90px);
+            }
+        }
+
+        /* Responsive Fallbacks */
+        @media (max-width: 1400px) {
+            .login-container {
+                transform: translate(250px, -50px);
+                animation: none;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .login-container {
+                transform: translate(0, 0);
+                width: 90%;
+            }
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateX(-4px);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+            /* Gradient Text */
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px rgba(165, 180, 252, 0.3));
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 35px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        label {
+            position: absolute;
+            left: 16px;
+            top: -9px;
+            background: rgba(18, 18, 24, 0.8);
+            /* Matches card bg */
+            padding: 0 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #a5b4fc;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            font-size: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #6366f1;
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .robot-check {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .robot-check:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .robot-check label {
+            position: static;
+            background: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+            text-transform: none;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .robot-check input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #6366f1;
+        }
+
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px -5px rgba(99, 102, 241, 0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px -5px rgba(99, 102, 241, 0.6);
+            filter: brightness(1.1);
+        }
+
+        button:hover::after {
+            left: 100%;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        /* Password Toggle Styles */
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.4);
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: none;
+            /* Reset global button shadow */
+            width: auto;
+            /* Reset global button width */
+            text-transform: none;
+            /* Reset global button text-transform */
+        }
+
+        .toggle-password:hover {
+            color: #a5b4fc;
+            transform: scale(1.1);
+            background: none;
+            box-shadow: none;
+        }
+
+        .toggle-password svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .error-msg {
+            margin-top: 16px;
+            color: #f87171;
+            font-size: 13px;
+            text-align: center;
+            display: none;
+            padding: 12px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            animation: shake 0.4s ease-in-out;
+        }
+
+        /* Test Credentials Box Styles */
+        .test-credentials-box {
+            position: fixed;
+            left: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 280px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            animation: fadeInSlideRight 1s ease-out;
+        }
+
+        @keyframes fadeInSlideRight {
+            from {
+                opacity: 0;
+                transform: translate(-30px, -50%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translate(0, -50%);
+            }
+        }
+
+        .test-credentials-header {
+            font-size: 12px;
+            font-weight: 800;
+            color: #6366f1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .test-key-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .test-key-value {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            background: rgba(99, 102, 241, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px dashed rgba(99, 102, 241, 0.3);
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+        }
+
+        .test-disclaimer {
+            font-size: 11px;
+            color: #f87171;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+            display: block;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 1200px) {
+            .test-credentials-box {
+                position: static;
+                transform: none;
+                width: 400px;
+                margin-bottom: 20px;
+                animation: fadeIn 1s ease-out;
+            }
+
+            body {
+                flex-direction: column;
+                height: auto;
+                padding: 40px 20px;
+                overflow-y: auto;
+            }
+
+            .login-container {
+                transform: none !important;
+                animation: none !important;
+            }
+        }
+
+        @media (max-width: 450px) {
+
+            .test-credentials-box,
+            .login-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Test Credentials Box -->
+    <div class="test-credentials-box">
+        <span class="test-credentials-header">Test Access</span>
+        <div class="test-key-label">Admin Login Key:</div>
+        <div class="test-key-value">A1B2C3</div>
+        <div class="test-disclaimer">⚠️ FOR TEST PURPOSE ONLY</div>
+    </div>
+
+    <div class="login-container">
+
+        <a href="index.html" class="back-btn">← Back</a>
+
+        <h1>Expense Tracker</h1>
+        <h2>Secure Login</h2>
+
+        <form onsubmit="validateLogin(event)">
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" id="username" placeholder="Enter desired Display Name">
+            </div>
+
+            <div class="input-group">
+                <label>Login Key</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder="Enter Login Key given by admin">
+                    <button type="button" class="toggle-password" onclick="togglePassword()">
+                        <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Robot verification -->
+            <div class="robot-check">
+                <input type="checkbox" id="robotCheck">
+                <label for="robotCheck">I am not a robot</label>
+            </div>
+
+            <button type="submit">LOGIN SECURELY</button>
+        </form>
+
+        <p class="error-msg" id="errorMsg">
+            Invalid credentials or robot check not confirmed
+        </p>
+
+    </div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById("password");
+            const eyeIcon = document.getElementById("eyeIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                eyeIcon.innerHTML = `
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                    <line x1="1" y1="1" x2="23" y2="23"></line>
+                `;
+            } else {
+                passwordInput.type = "password";
+                eyeIcon.innerHTML = `
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                `;
+            }
+        }
+
+        function validateLogin(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const robotChecked = document.getElementById("robotCheck").checked;
+
+            if (
+                username.trim() !== "" &&
+                password === "A1B2C3" &&
+                robotChecked
+            ) {
+                localStorage.setItem("currentUser", username);
+                window.location.href = "dashboard.html";
+            } else {
+                document.getElementById("errorMsg").style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
